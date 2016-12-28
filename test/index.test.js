@@ -65,13 +65,6 @@ describe('feathers-authentication-jwt', () => {
       }).to.throw();
     });
 
-    it('throws an error if secret is not a string', () => {
-      expect(() => {
-        app.configure(jwt({ secret: true }));
-        app.setup();
-      }).to.throw();
-    });
-
     it('registers the jwt passport strategy', () => {
       sinon.spy(app.passport, 'use');
       sinon.spy(passportJWT, 'Strategy');

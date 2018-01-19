@@ -80,14 +80,6 @@ describe('@feathersjs/authentication-jwt', () => {
       }).to.throw();
     });
 
-    it('throws an error if secret is not provided', () => {
-      expect(() => {
-        app = expressify(feathers());
-        app.configure(authentication({}));
-        app.setup();
-      }).to.throw();
-    });
-
     it('registers the jwt passport strategy', () => {
       sinon.spy(app.passport, 'use');
       sinon.spy(passportJWT, 'Strategy');

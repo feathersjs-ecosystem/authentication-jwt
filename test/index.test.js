@@ -48,7 +48,13 @@ describe('@feathersjs/authentication-jwt', () => {
     beforeEach(done => {
       app = expressify(feathers());
       app.use('/users', memory());
-      app.configure(authentication({ secret: 'supersecret' }));
+      app.configure(authentication({
+        secret: 'supersecret',
+        cookie: {
+          enabled: true,
+          name: 'feathers-jwt'
+        }
+      }));
 
       app.service('users').create({
         name: 'test user'
@@ -208,6 +214,26 @@ describe('@feathersjs/authentication-jwt', () => {
             authorization: `Bearer ${validToken}`
           },
           cookies: {}
+        };
+
+        app.configure(jwt());
+        app.setup();
+
+        return app.authenticate('jwt')(req).then(result => {
+          expect(result.success).to.equal(true);
+        });
+      });
+    });
+
+    describe('Cookie', () => {
+      it('authenticates using a cookie if set in options', () => {
+        const req = {
+          query: {},
+          body: {},
+          headers: {},
+          cookies: {
+            'feathers-jwt': validToken
+          }
         };
 
         app.configure(jwt());
